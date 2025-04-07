@@ -1,33 +1,27 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-  <meta charset="UTF-8">
-  <title>p5MediaPipeHands Hands Landmarker</title>
-</head>
-
 <body>
+  <button id="button_webcam" disabled onclick="startWebcam();">
+    Model Loading...
+  </button>
+  <div id="canvas"></div>
 
+  <!-- include js libraries -->
+  <script src="./js/drawing_utils.js"></script>
+  <script src="./js/hands.js"></script>
+  <script src="./js/p5.js"></script>
+  <script src="./js/p5.sound.min.js"></script>
+  <script src="./js/Fruit.js"></script>
+  <script src="./js/Bomb.js"></script>
+  <script src="./js/sketch.js"></script>
+  <script type="module" src="./js/script.js"></script>
 
-  <body>
-    <h1>Hands Landmarker</h1>
-
-    <button id="button_webcam" disabled onclick="startWebcam();">
-      Model Loading...
-    </button>
-    <div id="canvas"></div>
-
-
-    <!-- include js libraries -->
-      <script src="./js/drawing_utils.js"></script>
-    <script src="./js/hands.js"></script>
-    <script src="./js/p5.js"></script>
-     <script src="./js/Fruit.js"></script>
-<script src="./js/sketch.js"></script>
-   <script type="module" src="./js/script.js"></script> 
-      
-<style>
+  <style>
     body {
-        overflow: hidden; #can change to overflow if you want to stop both directions
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
     }
-</style>
+  </style>
+</body>
+
+      
