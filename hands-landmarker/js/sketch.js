@@ -9,6 +9,7 @@ let bombUp;
 let p5canvas = null;
 var bakgroundImage;
 var slicedWatermelon;
+var endScreen;
 let points;
 let gravity; //gravity force
 let force;
@@ -20,18 +21,21 @@ let font;
 let prevX = null;
 let prevY = null;
 let interval, startTime, seconds, minutes, time, remainingTime;
+let gameOver = false; 
+let bombWasHit = false;
 
 
 function preload(){
 backgroundImage=loadImage('background.jpg');
 slicedWatermelon = loadImage('slicedWatermelon.png');
+endScreen = loadImage('endScreen.jpg');
 }
 
 function setup() {
  //p5canvas.parent('#canvas');
   p5canvas = createCanvas(displayWidth+100, displayHeight);
     imageMode(CENTER);
-  //  backgroundImage.resize(displayWidth+500, displayHeight);
+  endScreen.resize(displayWidth+500, displayHeight);
     slicedWatermelon.resize(100,100);
     
 
@@ -48,7 +52,7 @@ function setup() {
      font = loadFont('font.ttf');
     
      startTime = millis();
-     interval = 120000;
+    interval = 120000;
     
      slicingFruit = loadSound("slicingFruit.mp3");
     
@@ -82,6 +86,7 @@ function startWebcam() {
 function draw() {
  background(255);
 imageMode(CENTER);
+//startWebcam();
 image(backgroundImage, displayWidth*0.5, displayHeight*0.5);
   if (cam) {
    image(cam, displayWidth-100, 0, displayWidth * 0.75, displayHeight * 0.75);
@@ -89,7 +94,7 @@ image(backgroundImage, displayWidth*0.5, displayHeight*0.5);
   }
     
 //add new fruit every 3 seconds
-if (millis() - lastFruitTime > 2000) {
+if (!gameOver &&  !bombWasHit && millis() - lastFruitTime > 2000) {
 fruits.push(new Fruit());
     if (!woosh.isPlaying()) {
         woosh.play();
@@ -98,7 +103,7 @@ lastFruitTime = millis();
   }
 
 //add new bomb every 10 seconds
-if (millis() - lastBombTime > 10000) {
+if (!gameOver && millis() - lastBombTime > 10000) {
 bombs.push(new Bomb());
   if (!bombUp.isPlaying()) {
         bombUp.play();
@@ -148,9 +153,13 @@ text(":" + points, width/24+75, height/12);
     
   remainingTime = interval - (millis() - startTime);
 
-  if (remainingTime < 0) {
-    remainingTime = 0;
-  }
+ 
+    if (remainingTime <=0) {
+ remainingTime = 0;
+        gameOver = true; 
+        displayGameOverScreen();
+        return; 
+    }
   
   minutes = Math.floor(remainingTime / 60000);
   seconds = Math.floor((remainingTime % 60000) / 1000);
@@ -230,10 +239,59 @@ for (let j = bombs.length - 1; j >= 0; j--) {
 if (bombHitTime !== null) {
   if (millis() - bombHitTime < flashDuration) {
     background(255); 
+    bombWasHit = true;
   } else {
     bombHitTime = null; 
+    bombWasHit = false;
+    
   }
 }
 
 }
 }
+
+    
+// Function to display the Game Over screen
+function displayGameOverScreen() {
+    
+
+   background(255);
+imageMode(CENTER);
+image(endScreen, displayWidth*0.5, displayHeight*0.5);
+    fill(255);
+    stroke(0);
+    strokeWeight(5);
+    textSize(100);
+    //textAlign(CENTER);
+    text("GAME OVER", width / 2-300, height / 2 - 100);
+    textSize(50);
+    text("Final Score: " + points, width / 2-200, height / 2);
+
+    // Show restart button
+    fill(255, 0, 0);
+    fill(255);
+    textSize(30);
+    text("Click to Restart", width / 2-155, height / 2 + 125);
+
+    // Detect mouse click to restart the game
+    if (mouseIsPressed) {
+        if (
+          mouseX > width / 2 - 155 &&  // Left edge of clickable area (fixed number)
+            mouseX < width / 2 + 155 &&  // Right edge of clickable area (fixed number)
+            mouseY > height / 2  &&  // Top edge of clickable area (fixed number)
+            mouseY < height / 2 + 150
+        ) {
+            restartGame();
+        }
+    }
+}
+
+// Function to restart the game
+function restartGame() {
+    points = 0;
+    fruits = [];
+    bombs = [];
+    gameOver = false;  // Reset the game over flag
+    startTime = millis();  // Reset the timer
+}
+    
