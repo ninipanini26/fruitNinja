@@ -214,7 +214,7 @@ if (prevX !== null && prevY !== null) {
       points += 1;
         //fix this add slicing audio instead
          slicingFruit.play();
-      text("NICE!!!", width/2, height/2);
+   //   text("NICE!!!", width/2, height/2);
         
     }
   }
