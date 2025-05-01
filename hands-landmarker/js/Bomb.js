@@ -1,6 +1,6 @@
 class Bomb{
      constructor() {
-        this.position = createVector(random(width/2), height/4); 
+        this.position = createVector(random(width/2), 0); 
         this.velocity = createVector(0, -5);
         this.acceleration = createVector(0, 0);
         this.mass = random(5, 10);
